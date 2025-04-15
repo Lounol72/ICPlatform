@@ -30,7 +30,7 @@ public class MainClass {
         player.displayPlayerInfo();
 
         GameClass game = new GameClass();
-        
+        game.startGame();
         System.out.println("Game started.");
         
     }

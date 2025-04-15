@@ -1,16 +1,17 @@
 package game;
 
 import javax.swing.JPanel;
+import keyboard.KeyboardInputs;
 import java.awt.Graphics;
-import java.awt.Color;
+
 public class GamePanel extends JPanel{
 
     public GamePanel(){
-
+        addKeyListener(new KeyboardInputs());
     }
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        g.drawRect(100, 100, 200, 50);
+        g.fillRect(100, 100, 200, 50);
     }
 }
