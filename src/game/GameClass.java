@@ -11,16 +11,5 @@ public class GameClass {
         gamePanel.requestFocus();
                 
     }
-    public void startGame() {
-        gameWindow.startGame();
-        gameRunning = true;
-    }
-    public void endGame() {
-        
-        gameWindow.endGame();
-        gameRunning = false;
-    }
-    public static boolean isGameRunning() {
-        return gameRunning;
-    }
+    
 }

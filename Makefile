@@ -9,7 +9,7 @@ compile:
 	@javac $(SRC_DIR)/**/*.java
 
 run:
-	@java -cp $(SRC_DIR) main.$(MAIN_CLASS) $(ARGS)
+	@java -cp $(SRC_DIR):assets main.$(MAIN_CLASS) $(ARGS)
 
 clean:
 	@rm -f $(SRC_DIR)/**/*.class

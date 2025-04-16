@@ -1,7 +1,7 @@
 package main;
 
 import player.PlayerClass;
-import game.GameClass;
+import game.Game;
 
 public class MainClass {
     public static void main(String[] args) {
@@ -29,9 +29,8 @@ public class MainClass {
         System.out.println("Player Info after reset:");
         player.displayPlayerInfo();
 
-        GameClass game = new GameClass();
-        game.startGame();
-        System.out.println("Game started.");
+        Game game = new Game();
+        
         
     }
 }
