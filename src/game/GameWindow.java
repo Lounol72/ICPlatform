@@ -17,9 +17,4 @@ public class GameWindow extends JFrame {
         frame.pack();
         frame.setVisible(true);
     }
-    public void endGame() {
-        frame.setVisible(false);
-        frame.dispose();
-        
-    }
 }

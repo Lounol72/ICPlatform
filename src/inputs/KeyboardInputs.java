@@ -2,6 +2,7 @@ package inputs;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import state.*;
 
 import game.GamePanel;
 
@@ -22,17 +23,17 @@ public class KeyboardInputs implements KeyListener{
 
         switch(e.getKeyCode()){
             case KeyEvent.VK_Z:
-                gamePanel.changeYDelta(-5);
+                gamePanel.changeYDelta(-gamePanel.getPlayerSpeed());
                 break;
             case KeyEvent.VK_Q:
-                gamePanel.changeXDelta(-5);
+                gamePanel.changeXDelta(-gamePanel.getPlayerSpeed());
                 
                 break;
             case KeyEvent.VK_S:
-                gamePanel.changeYDelta(5);
+                gamePanel.changeYDelta(gamePanel.getPlayerSpeed());
                 break;
             case KeyEvent.VK_D:
-                gamePanel.changeXDelta(5);
+                gamePanel.changeXDelta(gamePanel.getPlayerSpeed());
                 break;
             case 127:
                 System.out.println("SUPPR key pressed");
@@ -40,13 +41,17 @@ public class KeyboardInputs implements KeyListener{
             default:
                 
         }
-        gamePanel.setState(1);
+        if (gamePanel.getCurrentAnimation() == 0) {
+            gamePanel.setCurrentAnimation(1);
+        }
     }
     @Override
     public void keyReleased(KeyEvent e) {
         // TO-DO auto-generated method stub
 
-        gamePanel.setState(0);
-    }
-    
+        if (gamePanel.getCurrentAnimation() != 0) {
+            gamePanel.setCurrentAnimation(0);
+        }
+
+        }
 }
