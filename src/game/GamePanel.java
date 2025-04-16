@@ -1,67 +1,61 @@
 /**
- * GamePanel is a custom JPanel that serves as the main game rendering panel.
- * It handles the loading and rendering of animations, as well as user input
- * through mouse and keyboard listeners. The panel supports different states
- * (e.g., IDLE, RUN) and updates the displayed animation accordingly.
- * 
- * Features:
- * - Loads and manages animations for different states (idle, run).
- * - Handles user input through mouse and keyboard listeners.
- * - Dynamically updates and renders animations based on the current state.
- * - Provides methods to adjust the position of the rendered image.
- * 
- * Dependencies:
- * - javax.imageio.ImageIO for loading images.
- * - javax.swing.JPanel for the game panel.
- * - java.awt.Graphics for rendering.
- * - java.awt.image.BufferedImage for image handling.
- * - Custom input classes: MouseInputs and KeyboardInputs.
- * 
- * Usage:
- * - Instantiate GamePanel and add it to a JFrame.
- * - Use setState(State state) to change the animation state.
- * - Use changeXDelta(int value) and changeYDelta(int value) to move the image.
- * 
- * Note:
- * - Ensure the assets folder is correctly structured and accessible.
- * - The image paths must be relative to the assets folder.
- * - The panel size is fixed to 1280x800 pixels.
- * 
- * Author: Lounol72
- * Date: 16/04/2025
+ * GamePanel est un JPanel personnalisé qui sert de panneau principal pour
+ * le rendu du jeu. Il gère les animations, les entrées utilisateur et
+ * l'affichage des états du joueur.
+ *
+ * Fonctionnalités :
+ * - Charge et gère les animations pour différents états du joueur.
+ * - Gère les entrées utilisateur via des écouteurs de souris et de clavier.
+ * - Met à jour et rend dynamiquement les animations en fonction de l'état actuel.
+ *
+ * Méthodes principales :
+ * - paintComponent(Graphics g) : Rendu des animations du joueur.
+ * - setDirection(int playerDir) : Définit la direction du joueur.
+ * - setplayerAction(int animation) : Change l'état d'animation du joueur.
+ * - updateAnimationTick() : Met à jour l'index de l'animation.
+ *
+ * Utilisation :
+ * - Instancier GamePanel et l'ajouter à un JFrame.
+ *
+ * Auteur : Lounol72
+ * Date : 16/04/2025
  */
 package game;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import inputs.*;
-import state.*;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import static utilz.Constants.PlayerConstants.*;
+import static utilz.Constants.Directions.*;
 
 public class GamePanel extends JPanel{
     private MouseInputs mouseInputs;
     private KeyboardInputs keyboardInputs;
     private BufferedImage image;
     private BufferedImage[][] animations;
-    private int currentAnimation = 0;
+    private int playerAction = IDLE;
+    private int playerDir = -1;
     private int indexImage = 0;
+    private boolean isMoving = false;
 
     private final int frameWidth = 64, frameHeight = 40;
 
     private int xDelta = 100, yDelta = 100;
     private int animationTick = 0, animationIndex = 0, animationSpeed = 20;
-    private final int playerSpeed = 4;
+    private final int playerSpeed = 1;
 
     public GamePanel(){
         mouseInputs = new MouseInputs(this);
         keyboardInputs = new KeyboardInputs(this);
 
         
-        image =  importImage("/Captain Clown Nose/player_sprites.png");
+        image =  importImage();
         loadAnimations();
 
         setPanelSize(1280, 800);
@@ -80,8 +74,8 @@ public class GamePanel extends JPanel{
         }
     }
     
-    private BufferedImage importImage(String path) {
-        String imagePath = "../../assets" + path;
+    private BufferedImage importImage() {
+        String imagePath = "/Captain Clown Nose/player_sprites.png";
         InputStream is =  getClass().getResourceAsStream(imagePath);
         if (is == null) {
             System.out.println("Image not found");
@@ -111,20 +105,9 @@ public class GamePanel extends JPanel{
         setMaximumSize(size);
     }
 
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(animations[currentAnimation][indexImage], xDelta, yDelta, 128, 80, null);
-        
-        updateAnimationTick();
-    }
-
-    // Methods
-
-    public void changeXDelta(int value) {
-        this.xDelta += value;
-    }
-    public void changeYDelta(int value) {
-        this.yDelta += value;
+    public void setDirection(int playerDir) {
+        this.playerDir = playerDir;
+        isMoving = true;
     }
 
     public void updateAnimationTick() {
@@ -132,21 +115,54 @@ public class GamePanel extends JPanel{
         if (animationTick >= animationSpeed) {
             animationTick = 0;
             indexImage++;
-        }
-        if (indexImage >= animations[currentAnimation].length) {
-            indexImage = 0;
+            if (indexImage >= GetSpriteAmount(playerAction)) {
+                indexImage = 0;
+            }
         }
     }
 
-    public void setCurrentAnimation(int animation) {
-        this.currentAnimation = animation;
+    public void setplayerAction(int animation) {
+        this.playerAction = animation;
         indexImage = 0;
     }
-    public int getCurrentAnimation() {
-        return this.currentAnimation;
+    public int getplayerAction() {return this.playerAction;}
+    public int getPlayerSpeed() {return playerSpeed;}
+    public int getIndexImage() {return indexImage;}
+
+    public void setIsMoving(boolean b) { this.isMoving = b;}
+
+    private void setAnimation() {
+        if (isMoving) {
+            switch (playerDir) {
+                case UP:
+                    yDelta -= playerSpeed;
+                    break;
+                case DOWN:
+                    yDelta += playerSpeed;
+                    break;
+                case LEFT:
+                    xDelta -= playerSpeed;
+                    break;
+                case RIGHT:
+                    xDelta += playerSpeed;
+                    break;
+            }
+            playerAction = RUN;
+        } else {
+            playerAction = IDLE;
+        }
     }
-    public int getPlayerSpeed() {
-        return playerSpeed;
+
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        updateAnimationTick();
+        setAnimation();
+
+        g.drawImage(animations[playerAction][indexImage], xDelta, yDelta, 128, 80, null);
     }
+
+
+
 
 }

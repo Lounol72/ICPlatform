@@ -1,9 +1,29 @@
+/**
+ * La classe Game représente le cœur du jeu, gérant la boucle principale et
+ * initialisant les composants essentiels comme GamePanel et GameWindow.
+ *
+ * Fonctionnalités :
+ * - Initialise les composants graphiques du jeu.
+ * - Gère la boucle principale pour le rendu et la logique du jeu.
+ * - Affiche les FPS dans la console pour le suivi des performances.
+ *
+ * Méthodes principales :
+ * - startGameLoop() : Démarre la boucle principale dans un thread séparé.
+ * - run() : Implémente la logique de la boucle principale, calculant les FPS
+ *   et rafraîchissant l'affichage.
+ *
+ * Utilisation :
+ * - Instancier Game pour démarrer le jeu.
+ *
+ * Auteur : Lounol72
+ * Date : 16/04/2025
+ */
 package game;
 
 public class Game implements Runnable{
-    private GamePanel gamePanel;
-    private GameWindow gameWindow;
-    private Thread gameLoopThread;
+    private final GamePanel gamePanel;
+    private final GameWindow gameWindow;
+    private final Thread gameLoopThread;
     private final int FPS_SET = 120;
 
     public Game() {
