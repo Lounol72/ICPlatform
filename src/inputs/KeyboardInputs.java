@@ -1,81 +1,64 @@
-/**
- * La classe KeyboardInputs gère les événements du clavier pour contrôler
- * les actions et les déplacements du joueur.
- *
- * Fonctionnalités :
- * - Détecte les touches pressées pour changer la direction du joueur.
- * - Réinitialise les actions lorsque les touches sont relâchées.
- * - Intègre les actions du clavier avec GamePanel.
- *
- * Méthodes principales :
- * - keyPressed(KeyEvent e) : Définit la direction du joueur.
- * - keyReleased(KeyEvent e) : Arrête le mouvement du joueur.
- *
- * Utilisation :
- * - Ajouter KeyboardInputs comme écouteur à un composant graphique.
- *
- * Auteur : Lounol72
- * Date : 16/04/2025
- */
 package inputs;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-
-import static utilz.Constants.Directions.*;
 import game.GamePanel;
+import static utilz.Constants.Directions.*;
 
-public class KeyboardInputs implements KeyListener{
-    private final GamePanel gamePanel;
+public class KeyboardInputs implements KeyListener {
 
-    public KeyboardInputs(GamePanel gamePanel) {
-        this.gamePanel = gamePanel;
-    }
-    
-    @Override
-    public void keyTyped(KeyEvent e) {
-        // TO-DO auto-generated method stub
-    }
-    @Override
-    public void keyPressed(KeyEvent e) {
-        //System.out.println("Key pressed: " + e.getKeyChar() + " (" + e.getKeyCode() + ")");
+	private GamePanel gamePanel;
 
-        switch(e.getKeyCode()){
-            case KeyEvent.VK_Z:
-                gamePanel.setDirection(UP);
-                break;
-            case KeyEvent.VK_S:
-                gamePanel.setDirection(DOWN);
-                break;
-            case KeyEvent.VK_Q:
-                gamePanel.setDirection(LEFT);
-                break;
-            case KeyEvent.VK_D:
-                gamePanel.setDirection(RIGHT);
-                break;
-            case KeyEvent.VK_SPACE:
-            default:
-                break;
-        }
+	public KeyboardInputs(GamePanel gamePanel) {
+		this.gamePanel = gamePanel;
+	}
 
-    }
-    @Override
-    public void keyReleased(KeyEvent e) {
-        // TO-DO auto-generated method stub
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+	}
 
-        switch(e.getKeyCode()){
-            case KeyEvent.VK_Z:
+	@Override
+	public void keyReleased(KeyEvent e) {
+		switch (e.getKeyCode()) {
+			case KeyEvent.VK_Z:
+				gamePanel.getGame().getPlayer().setUp(false);
+				break;
+			case KeyEvent.VK_Q:
+				gamePanel.getGame().getPlayer().setLeft(false);
+				break;
+			case KeyEvent.VK_S:
+				gamePanel.getGame().getPlayer().setDown(false);
+				break;
+			case KeyEvent.VK_D:
+				gamePanel.getGame().getPlayer().setRight(false);
+				break;
+			case KeyEvent.VK_SPACE:
+				gamePanel.getGame().getPlayer().setJump(false);
+				break;
 
-            case KeyEvent.VK_S:
+		}
+	}
 
-            case KeyEvent.VK_Q:
-
-            case KeyEvent.VK_D:
-
-            case KeyEvent.VK_SPACE:
-                gamePanel.setIsMoving(false);
-                break;
-        }
-    }
+	@Override
+	public void keyPressed(KeyEvent e) {
+		switch (e.getKeyCode()) {
+			case KeyEvent.VK_Z:
+				gamePanel.getGame().getPlayer().setUp(true);
+				break;
+			case KeyEvent.VK_Q:
+				gamePanel.getGame().getPlayer().setLeft(true);
+				break;
+			case KeyEvent.VK_S:
+				gamePanel.getGame().getPlayer().setDown(true);
+				break;
+			case KeyEvent.VK_D:
+				gamePanel.getGame().getPlayer().setRight(true);
+				break;
+			case KeyEvent.VK_SPACE:
+				gamePanel.getGame().getPlayer().setJump(true);
+				break;
+		}
+	}
 }

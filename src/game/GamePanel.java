@@ -1,168 +1,75 @@
-/**
- * GamePanel est un JPanel personnalisé qui sert de panneau principal pour
- * le rendu du jeu. Il gère les animations, les entrées utilisateur et
- * l'affichage des états du joueur.
- *
- * Fonctionnalités :
- * - Charge et gère les animations pour différents états du joueur.
- * - Gère les entrées utilisateur via des écouteurs de souris et de clavier.
- * - Met à jour et rend dynamiquement les animations en fonction de l'état actuel.
- *
- * Méthodes principales :
- * - paintComponent(Graphics g) : Rendu des animations du joueur.
- * - setDirection(int playerDir) : Définit la direction du joueur.
- * - setplayerAction(int animation) : Change l'état d'animation du joueur.
- * - updateAnimationTick() : Met à jour l'index de l'animation.
- *
- * Utilisation :
- * - Instancier GamePanel et l'ajouter à un JFrame.
- *
- * Auteur : Lounol72
- * Date : 16/04/2025
- */
 package game;
 
-import javax.imageio.ImageIO;
-import javax.swing.JPanel;
-import inputs.*;
-
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import static utilz.Constants.PlayerConstants.*;
-import static utilz.Constants.Directions.*;
 
-public class GamePanel extends JPanel{
-    private MouseInputs mouseInputs;
-    private KeyboardInputs keyboardInputs;
-    private BufferedImage image;
-    private BufferedImage[][] animations;
-    private int playerAction = IDLE;
-    private int playerDir = -1;
-    private int indexImage = 0;
-    private boolean isMoving = false;
+import javax.swing.JPanel;
 
-    private final int frameWidth = 64, frameHeight = 40;
+import inputs.KeyboardInputs;
+import inputs.MouseInputs;
 
-    private int xDelta = 100, yDelta = 100;
-    private int animationTick = 0, animationIndex = 0, animationSpeed = 20;
-    private final int playerSpeed = 1;
+import static game.Game.*;
 
-    public GamePanel(){
+/**
+ * The GamePanel class is responsible for rendering the game graphics and handling user inputs.
+ * It extends the JPanel class and integrates mouse and keyboard input handling.
+ */
+public class GamePanel extends JPanel {
+
+    private MouseInputs mouseInputs; // Handles mouse inputs for the game panel
+    private Game game; // Reference to the main Game instance
+
+    /**
+     * Constructs a GamePanel instance.
+     *
+     * @param game The main Game instance to be associated with this panel.
+     */
+    public GamePanel(Game game) {
         mouseInputs = new MouseInputs(this);
-        keyboardInputs = new KeyboardInputs(this);
+        this.game = game;
 
-        
-        image =  importImage();
-        loadAnimations();
-
-        setPanelSize(1280, 800);
-        addKeyListener(keyboardInputs);
-        addMouseListener(mouseInputs);
-        addMouseMotionListener(mouseInputs);
+        setPanelSize(); // Sets the size of the panel
+        addKeyListener(new KeyboardInputs(this)); // Adds a keyboard input listener
+        addMouseListener(mouseInputs); // Adds a mouse input listener
+        addMouseMotionListener(mouseInputs); // Adds a mouse motion listener
     }
 
-    private void loadAnimations() {
-        animations = new BufferedImage[9][6];
-
-        for (int i = 0; i < animations.length; i++) {
-            for (int j = 0; j < animations[i].length; j++) {
-                animations[i][j] = this.image.getSubimage(j * frameWidth, i * frameHeight, frameWidth, frameHeight);
-            }
-        }
-    }
-    
-    private BufferedImage importImage() {
-        String imagePath = "/Captain Clown Nose/player_sprites.png";
-        InputStream is =  getClass().getResourceAsStream(imagePath);
-        if (is == null) {
-            System.out.println("Image not found");
-            return null;
-        }
-        BufferedImage img = null;
-        try{
-            img = ImageIO.read(is);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            
-        }
-        return img;
-        
-    }
-
-    private void setPanelSize(int i, int j) {
-        Dimension size = new Dimension(i, j);
-        setMinimumSize(size);
+    /**
+     * Sets the preferred size of the panel based on the game dimensions.
+     */
+    private void setPanelSize() {
+        Dimension size = new Dimension(GAME_WIDTH, GAME_HEIGHT);
         setPreferredSize(size);
-        setMaximumSize(size);
+        System.out.println("Size: " + GAME_WIDTH + " x " + GAME_HEIGHT);
     }
 
-    public void setDirection(int playerDir) {
-        this.playerDir = playerDir;
-        isMoving = true;
+    /**
+     * Updates the game state. This method is intended to be called periodically
+     * to update the game logic.
+     */
+    public void updateGame() {
+        // Game update logic will be implemented here
     }
 
-    public void updateAnimationTick() {
-        animationTick++;
-        if (animationTick >= animationSpeed) {
-            animationTick = 0;
-            indexImage++;
-            if (indexImage >= GetSpriteAmount(playerAction)) {
-                indexImage = 0;
-            }
-        }
-    }
-
-    public void setplayerAction(int animation) {
-        this.playerAction = animation;
-        indexImage = 0;
-    }
-    public int getplayerAction() {return this.playerAction;}
-    public int getPlayerSpeed() {return playerSpeed;}
-    public int getIndexImage() {return indexImage;}
-
-    public void setIsMoving(boolean b) { this.isMoving = b;}
-
-    private void setAnimation() {
-        if (isMoving) {
-            switch (playerDir) {
-                case UP:
-                    yDelta -= playerSpeed;
-                    break;
-                case DOWN:
-                    yDelta += playerSpeed;
-                    break;
-                case LEFT:
-                    xDelta -= playerSpeed;
-                    break;
-                case RIGHT:
-                    xDelta += playerSpeed;
-                    break;
-            }
-            playerAction = RUN;
-        } else {
-            playerAction = IDLE;
-        }
-    }
-
+    /**
+     * Paints the game components on the panel.
+     *
+     * @param g The Graphics object used for drawing.
+     */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        updateAnimationTick();
-        setAnimation();
-
-        g.drawImage(animations[playerAction][indexImage], xDelta, yDelta, 128, 80, null);
+        // Delegates additional rendering to the Game instance
+        game.render(g);
     }
 
-
-
-
+    /**
+     * Gets the associated Game instance.
+     *
+     * @return The Game instance.
+     */
+    public Game getGame() {
+        return game;
+    }
 }
