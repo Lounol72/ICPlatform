@@ -6,7 +6,6 @@ public enum GameState {
     OPTIONS,
     QUIT,
     GAMEOVER,
-    PAUSE,
     WIN,
     LOSE,
     CREDITS,

@@ -39,8 +39,6 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 				break;
 			case GAMEOVER:
 				break;
-			case PAUSE:
-				break;
 			case WIN:
 				break;
 			case LOSE:
@@ -85,8 +83,6 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 			case QUIT:
 				break;
 			case GAMEOVER:
-				break;
-			case PAUSE:
 				break;
 			case WIN:
 				break;
@@ -134,8 +130,6 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 				break;
 			case GAMEOVER:
 				break;
-			case PAUSE:
-				break;
 			case WIN:
 				break;
 			case LOSE:
@@ -181,8 +175,6 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 			case QUIT:
 				break;
 			case GAMEOVER:
-				break;
-			case PAUSE:
 				break;
 			case WIN:
 				break;

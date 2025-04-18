@@ -1,18 +1,28 @@
 /**
  * La classe Game représente le cœur du jeu, gérant la boucle principale et
- * initialisant les composants essentiels comme GamePanel et GameWindow.
- * Fonctionnalités :
- * - Initialise les composants graphiques du jeu.
- * - Gère la boucle principale pour le rendu et la logique du jeu.
- * - Affiche les FPS dans la console pour le suivi des performances.
- * Méthodes principales :
- * - startGameLoop() : Démarre la boucle principale dans un thread séparé.
- * - run() : Implémente la logique de la boucle principale, calculant les FPS
- *   et rafraîchissant l'affichage.
- * Utilisation :
- * - Instancier Game pour démarrer le jeu.
- * Auteur : Lounol72
- * Date : 16/04/2025
+ * l'ensemble des composants du jeu.
+ *
+ * <p><b>Fonctionnalités principales :</b></p>
+ * <ul>
+ *   <li>Initialisation des composants graphiques et des états du jeu</li>
+ *   <li>Gestion de la boucle principale avec synchronisation FPS/UPS</li>
+ *   <li>Coordination des différents états du jeu (menu, jeu, options)</li>
+ *   <li>Gestion de l'échelle et des dimensions du jeu</li>
+ * </ul>
+ *
+ * <p><b>Constantes importantes :</b></p>
+ * <ul>
+ *   <li>SCALE : Facteur d'échelle appliqué aux éléments graphiques</li>
+ *   <li>TILES_SIZE : Taille des tuiles du jeu après mise à l'échelle</li>
+ *   <li>GAME_WIDTH/HEIGHT : Dimensions de la fenêtre de jeu</li>
+ *   <li>PLAYER_WIDTH/HEIGHT : Dimensions du joueur après mise à l'échelle</li>
+ * </ul>
+ *
+ * <p><b>Utilisation :</b> Instancier un objet Game pour démarrer le jeu.</p>
+ *
+ * @author Lounol72
+ * @version 1.0
+ * @since 16/04/2025
  */
 package game;
 import gamestates.*;
@@ -20,31 +30,41 @@ import gamestates.Menu;
 import java.awt.*;
 
 public class Game implements Runnable{
-    private final GamePanel gamePanel;
-    private final GameWindow gameWindow;
-    private Thread gameLoopThread;
-    private final int FPS_SET = 120;
-    private final int UPS_SET = 200;
+    // Composants principaux du jeu
+    private final GamePanel gamePanel;      // Panneau où le jeu est rendu
+    private final GameWindow gameWindow;    // Fenêtre qui contient le panneau
+    private Thread gameLoopThread;          // Thread dédié à la boucle de jeu
 
-    private Playing playing;
-    private Menu menu;
-    private Pause pause;
-    private Options options;
+    // Paramètres de performance
+    private final int FPS_SET = 120;        // Images par seconde cible
+    private final int UPS_SET = 200;        // Mises à jour par seconde cible
 
-    public final static float SCALE = 2.0f;
+    // États du jeu
+    private Playing playing;                // État de jeu actif
+    private Menu menu;                      // État du menu
+    private Options options;                // État des options
 
-    public final static int TILES_DEFAULT_SIZE = 32;
-    public final static int TILES_IN_WIDTH = 26;
-    public final static int TILES_IN_HEIGHT = 14;
-    public final static int TILES_SIZE = (int) (TILES_DEFAULT_SIZE * SCALE);
-    public final static int GAME_WIDTH = TILES_SIZE * TILES_IN_WIDTH;
-    public final static int GAME_HEIGHT = TILES_SIZE * TILES_IN_HEIGHT;
+    // Constantes de mise à l'échelle et dimensions
+    public final static float SCALE = 1.0f;                              // Facteur d'échelle global
 
-    public final static int PLAYER_DEFAULT_WIDTH = 64;
-    public final static int PLAYER_DEFAULT_HEIGHT = 40;
-    public final static int PLAYER_WIDTH = (int) (PLAYER_DEFAULT_WIDTH * SCALE);
-    public final static int PLAYER_HEIGHT = (int) (PLAYER_DEFAULT_HEIGHT * SCALE);
+    // Constantes liées aux tuiles
+    public final static int TILES_DEFAULT_SIZE = 32;                     // Taille de base d'une tuile
+    public final static int TILES_IN_WIDTH = 26;                         // Nombre de tuiles en largeur
+    public final static int TILES_IN_HEIGHT = 14;                        // Nombre de tuiles en hauteur
+    public final static int TILES_SIZE = (int) (TILES_DEFAULT_SIZE * SCALE);  // Taille d'une tuile après mise à l'échelle
+    public final static int GAME_WIDTH = TILES_SIZE * TILES_IN_WIDTH;    // Largeur totale du jeu
+    public final static int GAME_HEIGHT = TILES_SIZE * TILES_IN_HEIGHT;  // Hauteur totale du jeu
 
+    // Constantes liées au joueur
+    public final static int PLAYER_DEFAULT_WIDTH = 64;                   // Largeur de base du joueur
+    public final static int PLAYER_DEFAULT_HEIGHT = 40;                  // Hauteur de base du joueur
+    public final static int PLAYER_WIDTH = (int) (PLAYER_DEFAULT_WIDTH * SCALE);    // Largeur du joueur après mise à l'échelle
+    public final static int PLAYER_HEIGHT = (int) (PLAYER_DEFAULT_HEIGHT * SCALE);  // Hauteur du joueur après mise à l'échelle
+
+    /**
+     * Constructeur qui initialise et démarre le jeu.
+     * Crée les composants nécessaires et lance la boucle de jeu.
+     */
     public Game() {
         initClasses();
         gamePanel = new GamePanel(this);
@@ -55,21 +75,30 @@ public class Game implements Runnable{
         startGameLoop();
     }
 
+    /**
+     * Initialise les différents états du jeu.
+     */
     private void initClasses() {
         this.menu = new Menu(this);
         this.playing = new Playing(this);
-        this.pause = new Pause(this);
         this.options = new Options(this);
     }
 
+    /**
+     * Démarre la boucle de jeu dans un thread séparé.
+     */
     private void startGameLoop() {
         gameLoopThread = new Thread(this);
         gameLoopThread.start();
     }
 
+    /**
+     * Met à jour l'état du jeu en fonction du GameState actuel.
+     * Délègue la mise à jour à l'état approprié.
+     */
     private void update() {
         switch (GameState.state){
-            case MENU :
+            case MENU:
                 menu.update();
                 break;
             case PLAYING:
@@ -79,9 +108,9 @@ public class Game implements Runnable{
                 options.update();
                 break;
             case QUIT:
+                System.exit(0);
+                // Autres états à implémenter
             case GAMEOVER:
-            case PAUSE:
-                pause.update();
             case WIN:
             case LOSE:
             case CREDITS:
@@ -95,15 +124,20 @@ public class Game implements Runnable{
             case LEVELUP:
             case SKILLTREE:
                 break;
-            default : throw new IllegalStateException("Unexpected value: " + GameState.state);
+            default:
+                throw new IllegalStateException("Unexpected value: " + GameState.state);
         }
     }
 
+    /**
+     * Dessine l'état actuel du jeu selon le GameState.
+     * Délègue le rendu à l'état approprié.
+     *
+     * @param g Contexte graphique utilisé pour le dessin
+     */
     public void render(Graphics g) {
-
-
         switch (GameState.state){
-            case MENU :
+            case MENU:
                 menu.draw(g);
                 break;
             case PLAYING:
@@ -112,11 +146,9 @@ public class Game implements Runnable{
             case OPTIONS:
                 options.draw(g);
                 break;
+            // Autres états à implémenter
             case QUIT:
             case GAMEOVER:
-            case PAUSE:
-                pause.draw(g);
-                break;
             case WIN:
             case LOSE:
             case CREDITS:
@@ -130,44 +162,54 @@ public class Game implements Runnable{
             case LEVELUP:
             case SKILLTREE:
                 break;
-            default : throw new IllegalStateException("Unexpected value: " + GameState.state);
+            default:
+                throw new IllegalStateException("Unexpected value: " + GameState.state);
         }
     }
 
+    /**
+     * Implémente la boucle principale du jeu avec synchronisation FPS/UPS.
+     * Utilise un temps delta pour maintenir une cadence régulière.
+     * Affiche les FPS et UPS dans la console pour le suivi des performances.
+     */
     @Override
     public void run() {
-
-
-        double timePerFrame = 1000000000.0 / FPS_SET; // 1 second / FPS_SET
-        double timePerUpdate = 1000000000.0 / UPS_SET; // 1 second / UPS_SET
+        // Calcul du temps entre chaque frame et update
+        double timePerFrame = 1000000000.0 / FPS_SET;  // Nanoseconds par frame
+        double timePerUpdate = 1000000000.0 / UPS_SET; // Nanoseconds par update
 
         long previousTime = System.nanoTime();
-        int frames = 0;
-        int updates = 0;
-
+        int frames = 0;      // Compteur de frames rendues
+        int updates = 0;     // Compteur de mises à jour effectuées
         long lastCheck = System.currentTimeMillis();
 
-        double deltaU = 0;
-        double deltaF = 0;
+        double deltaU = 0;   // Accumulation du temps pour les updates
+        double deltaF = 0;   // Accumulation du temps pour les frames
 
+        // Boucle infinie du jeu
         while (true) {
             long currentTime = System.nanoTime();
 
+            // Calcul des deltas
             deltaU += (currentTime - previousTime) / timePerUpdate;
             deltaF += (currentTime - previousTime) / timePerFrame;
-
             previousTime = currentTime;
+
+            // Mise à jour de la logique si nécessaire
             if (deltaU >= 1) {
                 update();
                 updates++;
                 deltaU--;
             }
+
+            // Rendu à l'écran si nécessaire
             if (deltaF >= 1) {
                 gamePanel.repaint();
                 frames++;
                 deltaF--;
             }
-            // FPS and UPS check
+
+            // Affichage des FPS et UPS chaque seconde
             if (System.currentTimeMillis() - lastCheck >= 1000) {
                 lastCheck = System.currentTimeMillis();
                 System.out.println("FPS: " + frames + " | UPS: " + updates);
@@ -177,18 +219,18 @@ public class Game implements Runnable{
         }
     }
 
-
+    /**
+     * Gère la perte de focus de la fenêtre.
+     * Met le jeu en pause si l'état actuel est PLAYING.
+     */
     public void windowFocusLost() {
         if (GameState.state == GameState.PLAYING) {
-            // Pause the game or perform any other action
             playing.windowFocusLost();
         }
-
     }
 
+    // Getters pour accéder aux états du jeu
     public Menu getMenu() {return menu;}
     public Playing getPlaying() {return playing;}
-
-    public Pause getPause() {return pause;}
     public Options getOptions() {return this.options;}
 }

@@ -2,8 +2,15 @@
   <dictionary name="project">
     <words>
       <w>classe</w>
+      <w>composants</w>
+      <w>contient</w>
+      <w>fenêtre</w>
       <w>l'affichage</w>
+      <w>panneau</w>
+      <w>paramètres</w>
+      <w>principaux</w>
       <w>rafraîchissant</w>
+      <w>rendu</w>
       <w>représente</w>
     </words>
   </dictionary>

@@ -37,9 +37,6 @@ public class KeyboardInputs implements KeyListener {
 				break;
 			case GAMEOVER:
 				break;
-			case PAUSE:
-				gamePanel.getGame().getPause().keyReleased(e);
-				break;
 			case WIN:
 				break;
 			case LOSE:
@@ -75,9 +72,6 @@ public class KeyboardInputs implements KeyListener {
 			case QUIT:
 				break;
 			case GAMEOVER:
-				break;
-			case PAUSE:
-				gamePanel.getGame().getPause().keyPressed(e);
 				break;
 			case WIN:
 				break;
