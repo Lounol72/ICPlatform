@@ -14,7 +14,12 @@ import static game.Game.TILES_IN_WIDTH;
 public class LoadSave {
     public static final String PLAYER_ATLAS = "/Captain Clown Nose/player_sprites.png";
     public static final String LEVEL_ATLAS = "/Palm Tree Island/Sprites/Terrain/Terrain (32x32).png";
+
+    public static final String MENU_BUTTONS = "/Wood and Paper UI/Menu/button_atlas.png";
+    public static final String MENU_BACKGROUND = "/Wood and Paper UI/Menu/menu_background.png";
+
     public static final String LEVEL_ONE_DATA = "/Levels/level_one_data.png";
+
 
     public static BufferedImage GetSpriteAtlas(String path) {
         BufferedImage img = null;

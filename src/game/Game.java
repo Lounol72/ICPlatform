@@ -15,10 +15,13 @@
  * Date : 16/04/2025
  */
 package game;
+import entities.Player;
 import gamestates.*;
 import gamestates.Menu;
+import levels.LevelManager;
 
 import java.awt.*;
+import java.awt.event.KeyListener;
 
 public class Game implements Runnable{
     private final GamePanel gamePanel;
@@ -29,6 +32,7 @@ public class Game implements Runnable{
 
     private Playing playing;
     private Menu menu;
+    private Pause pause;
 
     public final static float SCALE = 2.0f;
 
@@ -45,7 +49,7 @@ public class Game implements Runnable{
     public final static int PLAYER_HEIGHT = (int) (PLAYER_DEFAULT_HEIGHT * SCALE);
 
     public Game() {
-
+        initClasses();
         gamePanel = new GamePanel(this);
         gameWindow = new GameWindow(gamePanel);
         gamePanel.setFocusable(true);
@@ -55,7 +59,9 @@ public class Game implements Runnable{
     }
 
     private void initClasses() {
-
+        this.menu = new Menu(this);
+        this.playing = new Playing(this);
+        this.pause = new Pause(this);
     }
 
     private void startGameLoop() {
@@ -66,13 +72,16 @@ public class Game implements Runnable{
     private void update() {
         switch (GameState.state){
             case MENU :
+                menu.update();
                 break;
             case PLAYING:
+                playing.update();
                 break;
             case OPTIONS:
             case QUIT:
             case GAMEOVER:
             case PAUSE:
+                pause.update();
             case WIN:
             case LOSE:
             case CREDITS:
@@ -95,13 +104,17 @@ public class Game implements Runnable{
 
         switch (GameState.state){
             case MENU :
+                menu.draw(g);
                 break;
             case PLAYING:
+                playing.draw(g);
                 break;
             case OPTIONS:
             case QUIT:
             case GAMEOVER:
             case PAUSE:
+                pause.draw(g);
+                break;
             case WIN:
             case LOSE:
             case CREDITS:
@@ -164,7 +177,15 @@ public class Game implements Runnable{
 
 
     public void windowFocusLost() {
+        if (GameState.state == GameState.PLAYING) {
+            // Pause the game or perform any other action
+            playing.windowFocusLost();
+        }
 
     }
 
+    public Menu getMenu() {return menu;}
+    public Playing getPlaying() {return playing;}
+
+    public Pause getPause() {return pause;}
 }

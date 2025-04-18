@@ -173,6 +173,7 @@ public class Player extends Entity {
 		right = false;
 		up = false;
 		down = false;
+		jump = false;
 	}
 
 	public void setAttacking(boolean attacking) {

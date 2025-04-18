@@ -18,7 +18,7 @@ public enum GameState {
     SETTINGS,
     TUTORIAL,
     LEVELUP,
-    SKILLTREE, state;
-    public static GameState currentState = MENU;
+    SKILLTREE ;
+    public static GameState state = MENU;
     public static GameState previousState = MENU;
 }
