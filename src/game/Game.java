@@ -15,13 +15,9 @@
  * Date : 16/04/2025
  */
 package game;
-import entities.Player;
 import gamestates.*;
 import gamestates.Menu;
-import levels.LevelManager;
-
 import java.awt.*;
-import java.awt.event.KeyListener;
 
 public class Game implements Runnable{
     private final GamePanel gamePanel;
@@ -33,6 +29,7 @@ public class Game implements Runnable{
     private Playing playing;
     private Menu menu;
     private Pause pause;
+    private Options options;
 
     public final static float SCALE = 2.0f;
 
@@ -62,6 +59,7 @@ public class Game implements Runnable{
         this.menu = new Menu(this);
         this.playing = new Playing(this);
         this.pause = new Pause(this);
+        this.options = new Options(this);
     }
 
     private void startGameLoop() {
@@ -78,6 +76,8 @@ public class Game implements Runnable{
                 playing.update();
                 break;
             case OPTIONS:
+                options.update();
+                break;
             case QUIT:
             case GAMEOVER:
             case PAUSE:
@@ -110,6 +110,8 @@ public class Game implements Runnable{
                 playing.draw(g);
                 break;
             case OPTIONS:
+                options.draw(g);
+                break;
             case QUIT:
             case GAMEOVER:
             case PAUSE:
@@ -188,4 +190,5 @@ public class Game implements Runnable{
     public Playing getPlaying() {return playing;}
 
     public Pause getPause() {return pause;}
+    public Options getOptions() {return this.options;}
 }

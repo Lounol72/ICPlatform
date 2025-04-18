@@ -24,8 +24,10 @@ public class Pause extends State implements StateMethods{
     @Override
     public void draw(Graphics g) {
         play.draw(g);
-        g.setColor(Color.BLACK);
-        g.drawString("Press Escape to continue", 50, 50);
+        g.setColor( new Color( 0, 0, 0, 150 ));
+        g.fillRect( 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT );
+        g.setColor(Color.WHITE);
+        g.drawString("Press Escape to continue", Game.GAME_WIDTH / 2 - 100, Game.GAME_HEIGHT / 2 - 50);
     }
 
     @Override

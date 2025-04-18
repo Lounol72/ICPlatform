@@ -18,6 +18,8 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		// TODO Auto-generated method stub
+		if (GameState.state == GameState.OPTIONS)
+			gamePanel.getGame().getOptions().mouseDragged(e);
 
 	}
 
@@ -31,6 +33,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 				gamePanel.getGame().getPlaying().mouseMoved(e);
 				break;
 			case OPTIONS:
+				gamePanel.getGame().getOptions().mouseMoved(e);
 				break;
 			case QUIT:
 				break;
@@ -77,6 +80,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 				gamePanel.getGame().getPlaying().mouseClicked(e);
 				break;
 			case OPTIONS:
+				gamePanel.getGame().getOptions().mouseClicked(e);
 				break;
 			case QUIT:
 				break;
@@ -124,6 +128,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 				gamePanel.getGame().getPlaying().mousePressed(e);
 				break;
 			case OPTIONS:
+				gamePanel.getGame().getOptions().mousePressed(e);
 				break;
 			case QUIT:
 				break;
@@ -171,6 +176,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 				gamePanel.getGame().getPlaying().mouseReleased(e);
 				break;
 			case OPTIONS:
+				gamePanel.getGame().getOptions().mouseReleased(e);
 				break;
 			case QUIT:
 				break;

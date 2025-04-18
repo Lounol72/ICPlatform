@@ -12,6 +12,9 @@ public class State {
         this.game = game;
     }
 
+    public State() {
+    }
+
     public boolean isIn(MouseEvent e, MenuButton mb){
         return mb.getBounds().contains(e.getX(), e.getY());
 
