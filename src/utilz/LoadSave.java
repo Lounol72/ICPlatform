@@ -20,7 +20,7 @@ public class LoadSave {
 
     public static final String VOLUME_BUTTONS = "/Wood and Paper UI/Pause/volume_buttons.png";
     public static final String SOUND_BUTTONS = "/Wood and Paper UI/Pause/sound_button.png";
-    public static final String PAUSE_BUTTONS = "/Wood and Paper UI/Pause/urm_buttons.png";
+    public static final String URM_BUTTONS = "/Wood and Paper UI/Pause/urm_buttons.png";
     public static final String PAUSE_BACKGROUND = "/Wood and Paper UI/Pause/pause_background.png";
 
     public static final String OPTIONS_BACKGROUND = "/Palm Tree Island/Sprites/Background/BG Image.png";

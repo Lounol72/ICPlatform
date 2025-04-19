@@ -111,11 +111,13 @@ public class Playing extends State implements StateMethods {
         levelManager = new LevelManager(game);
         player = new Player(100, 200, PLAYER_WIDTH , PLAYER_HEIGHT );
         player.loadLvlData(levelManager.getCurrentLevel().getLevelData());
-        pauseOverlay = new PauseOverlay();
+        pauseOverlay = new PauseOverlay(this);
 
     }
 
     public void windowFocusLost() {
         player.resetDirBooleans();
     }
+
+    public void setPaused( boolean b ) {paused = b;}
 }
